@@ -9,14 +9,12 @@ from reportlab.lib.units import inch
 from io import BytesIO
 import time
 
-# ── page config ───────────────────────────────────────────────
 st.set_page_config(
-    page_title="ResumeIQ — Smart Resume Scanner",
+    page_title="ResumeIQ — AI Resume Scanner",
     page_icon="⚡",
-    layout="wide"
+    layout="centered"
 )
 
-# ── custom CSS ────────────────────────────────────────────────
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
@@ -26,90 +24,119 @@ html, body, [class*="css"] {
 }
 
 .stApp {
-    background: #f7f8fc;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    min-height: 100vh;
 }
 
-/* ── sidebar ── */
-section[data-testid="stSidebar"] {
-    background: #ffffff;
-    border-right: 1px solid #e8eaf0;
-    padding-top: 1rem;
+/* ── hero ── */
+.hero-wrap {
+    text-align: center;
+    padding: 2.5rem 1rem 2rem;
 }
 
-section[data-testid="stSidebar"] .block-container {
-    padding: 1.5rem 1.2rem;
-}
-
-.sidebar-logo {
-    font-size: 1.6rem;
-    font-weight: 800;
-    background: linear-gradient(135deg, #2563eb, #7c3aed);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 0.2rem;
-}
-
-.sidebar-tagline {
-    font-size: 0.78rem;
-    color: #6b7280;
-    margin-bottom: 1.8rem;
-    font-weight: 400;
-}
-
-.sidebar-section {
-    font-size: 0.7rem;
-    font-weight: 700;
-    color: #9ca3af;
-    text-transform: uppercase;
+.hero-badge {
+    display: inline-block;
+    background: rgba(99, 102, 241, 0.15);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    color: #a5b4fc;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 4px 14px;
+    border-radius: 20px;
     letter-spacing: 0.1em;
-    margin: 1.2rem 0 0.5rem;
-}
-
-/* ── main area ── */
-.main-hero {
-    padding: 2rem 0 1.5rem;
-    border-bottom: 1px solid #e8eaf0;
-    margin-bottom: 2rem;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
 }
 
 .hero-title {
-    font-size: 2.2rem;
+    font-size: 2.6rem;
     font-weight: 800;
-    color: #111827;
-    margin: 0 0 0.4rem;
-    line-height: 1.2;
+    color: #ffffff;
+    line-height: 1.15;
+    margin-bottom: 0.6rem;
 }
 
 .hero-title span {
-    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .hero-sub {
     font-size: 0.95rem;
-    color: #6b7280;
-    font-weight: 400;
+    color: #94a3b8;
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* ── glass card ── */
+.glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 1.8rem;
+    margin-bottom: 1.2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 1.2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.card-icon.indigo { background: rgba(99,102,241,0.2); border: 1px solid rgba(99,102,241,0.3); }
+.card-icon.purple { background: rgba(168,85,247,0.2); border: 1px solid rgba(168,85,247,0.3); }
+.card-icon.pink   { background: rgba(236,72,153,0.2); border: 1px solid rgba(236,72,153,0.3); }
+.card-icon.green  { background: rgba(16,185,129,0.2); border: 1px solid rgba(16,185,129,0.3); }
+.card-icon.amber  { background: rgba(245,158,11,0.2); border: 1px solid rgba(245,158,11,0.3); }
+
+.card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #f1f5f9;
     margin: 0;
 }
 
+.card-subtitle {
+    font-size: 0.75rem;
+    color: #64748b;
+    margin: 2px 0 0;
+}
+
 /* ── stat cards ── */
-.stats-row {
-    display: flex;
-    gap: 16px;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 1.2rem;
 }
 
 .stat-card {
-    flex: 1;
-    min-width: 140px;
-    background: #ffffff;
-    border: 1px solid #e8eaf0;
-    border-radius: 16px;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 18px;
     padding: 1.2rem 1rem;
     text-align: center;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
 }
 
 .stat-number {
@@ -119,171 +146,64 @@ section[data-testid="stSidebar"] .block-container {
     margin-bottom: 4px;
 }
 
-.stat-number.blue { color: #2563eb; }
-.stat-number.purple { color: #7c3aed; }
-.stat-number.green { color: #059669; }
-.stat-number.orange { color: #d97706; }
+.stat-number.indigo { color: #818cf8; }
+.stat-number.purple { color: #c084fc; }
+.stat-number.green  { color: #34d399; }
+.stat-number.amber  { color: #fbbf24; }
 
 .stat-label {
-    font-size: 0.75rem;
-    color: #9ca3af;
-    font-weight: 500;
+    font-size: 0.7rem;
+    color: #64748b;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-/* ── section cards ── */
-.section-card {
-    background: #ffffff;
-    border: 1px solid #e8eaf0;
-    border-radius: 20px;
-    padding: 1.6rem 1.8rem;
-    margin-bottom: 1.4rem;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
-}
-
-.card-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 1.2rem;
-    padding-bottom: 0.8rem;
-    border-bottom: 1px solid #f3f4f6;
-}
-
-.card-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1rem;
-}
-
-.card-icon.blue { background: #eff6ff; }
-.card-icon.purple { background: #f5f3ff; }
-.card-icon.green { background: #ecfdf5; }
-.card-icon.orange { background: #fffbeb; }
-
-.card-title {
-    font-size: 0.95rem;
-    font-weight: 700;
-    color: #111827;
-    margin: 0;
-}
-
-.card-subtitle {
-    font-size: 0.78rem;
-    color: #9ca3af;
-    margin: 0;
+    letter-spacing: 0.06em;
 }
 
 /* ── score display ── */
 .score-display {
     text-align: center;
-    padding: 1rem 0;
+    padding: 1.5rem 0 1rem;
 }
 
 .score-big {
-    font-size: 5rem;
+    font-size: 5.5rem;
     font-weight: 800;
     line-height: 1;
-    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .score-status {
     display: inline-block;
-    padding: 4px 16px;
+    padding: 5px 18px;
     border-radius: 20px;
     font-size: 0.82rem;
     font-weight: 600;
-    margin-top: 8px;
+    margin-top: 10px;
 }
 
 .status-strong {
-    background: #ecfdf5;
-    color: #059669;
-    border: 1px solid #a7f3d0;
+    background: rgba(16,185,129,0.15);
+    color: #34d399;
+    border: 1px solid rgba(16,185,129,0.3);
 }
 
 .status-partial {
-    background: #fffbeb;
-    color: #d97706;
-    border: 1px solid #fde68a;
+    background: rgba(245,158,11,0.15);
+    color: #fbbf24;
+    border: 1px solid rgba(245,158,11,0.3);
 }
 
 .status-low {
-    background: #fef2f2;
-    color: #dc2626;
-    border: 1px solid #fecaca;
+    background: rgba(239,68,68,0.15);
+    color: #f87171;
+    border: 1px solid rgba(239,68,68,0.3);
 }
 
-/* ── keyword pills ── */
-.pills-wrap {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 0.5rem;
-}
-
-.pill {
-    padding: 5px 14px;
-    border-radius: 20px;
-    font-size: 0.78rem;
-    font-weight: 500;
-}
-
-.pill-found {
-    background: #ecfdf5;
-    color: #065f46;
-    border: 1px solid #6ee7b7;
-}
-
-.pill-missing {
-    background: #fef2f2;
-    color: #991b1b;
-    border: 1px solid #fca5a5;
-}
-
-/* ── suggestion items ── */
-.suggestion-item {
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-    padding: 0.9rem 1rem;
-    background: #f9fafb;
-    border-radius: 12px;
-    margin-bottom: 0.7rem;
-    border: 1px solid #f3f4f6;
-}
-
-.suggestion-num {
-    width: 24px;
-    height: 24px;
-    border-radius: 8px;
-    background: linear-gradient(135deg, #2563eb, #7c3aed);
-    color: white;
-    font-size: 0.72rem;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    margin-top: 1px;
-}
-
-.suggestion-text {
-    font-size: 0.88rem;
-    color: #374151;
-    line-height: 1.6;
-}
-
-/* ── progress bar animation ── */
+/* ── progress bars ── */
 .progress-wrap {
-    margin: 0.5rem 0 1rem;
+    margin: 0.6rem 0 1rem;
 }
 
 .progress-label {
@@ -295,18 +215,18 @@ section[data-testid="stSidebar"] .block-container {
 .progress-name {
     font-size: 0.82rem;
     font-weight: 600;
-    color: #374151;
+    color: #cbd5e1;
 }
 
 .progress-val {
     font-size: 0.82rem;
     font-weight: 700;
-    color: #2563eb;
+    color: #818cf8;
 }
 
 .progress-track {
     height: 8px;
-    background: #f3f4f6;
+    background: rgba(255,255,255,0.08);
     border-radius: 10px;
     overflow: hidden;
 }
@@ -314,89 +234,209 @@ section[data-testid="stSidebar"] .block-container {
 .progress-fill {
     height: 100%;
     border-radius: 10px;
-    background: linear-gradient(90deg, #2563eb, #7c3aed);
-    transition: width 1s ease;
+    background: linear-gradient(90deg, #6366f1, #a855f7);
+    animation: fillBar 1.2s ease forwards;
 }
 
-/* ── empty state ── */
-.empty-state {
-    text-align: center;
-    padding: 3rem 2rem;
-    color: #9ca3af;
+@keyframes fillBar {
+    from { width: 0%; }
+    to   { width: var(--target); }
 }
 
-.empty-icon {
-    font-size: 3rem;
-    margin-bottom: 1rem;
+/* ── keyword pills ── */
+.pills-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 0.6rem;
 }
 
-.empty-title {
-    font-size: 1.1rem;
+.pill {
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 0.75rem;
     font-weight: 600;
-    color: #6b7280;
-    margin-bottom: 0.4rem;
+    letter-spacing: 0.02em;
 }
 
-.empty-sub {
-    font-size: 0.85rem;
-    color: #9ca3af;
+.pill-found {
+    background: rgba(16,185,129,0.15);
+    color: #34d399;
+    border: 1px solid rgba(16,185,129,0.25);
 }
+
+.pill-missing {
+    background: rgba(239,68,68,0.12);
+    color: #f87171;
+    border: 1px solid rgba(239,68,68,0.2);
+}
+
+.pill-skill {
+    background: rgba(99,102,241,0.15);
+    color: #a5b4fc;
+    border: 1px solid rgba(99,102,241,0.25);
+}
+
+/* ── suggestion items ── */
+.suggestion-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 1rem;
+    background: rgba(255,255,255,0.04);
+    border-radius: 14px;
+    margin-bottom: 0.8rem;
+    border: 1px solid rgba(255,255,255,0.07);
+}
+
+.suggestion-num {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    color: white;
+    font-size: 0.72rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.suggestion-text {
+    font-size: 0.88rem;
+    color: #cbd5e1;
+    line-height: 1.6;
+}
+
+/* ── score counter animation ── */
+.counter-wrap {
+    display: flex;
+    justify-content: center;
+}
+
+/* ── loading bar ── */
+.loading-bar-wrap {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px;
+    height: 6px;
+    overflow: hidden;
+    margin: 1rem 0;
+}
+
+.loading-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #6366f1, #a855f7, #ec4899);
+    border-radius: 10px;
+    animation: loadingAnim 2s ease infinite;
+}
+
+@keyframes loadingAnim {
+    0%   { width: 0%; margin-left: 0%; }
+    50%  { width: 60%; margin-left: 20%; }
+    100% { width: 0%; margin-left: 100%; }
+}
+
+/* ── divider ── */
+.glass-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(99,102,241,0.4), transparent);
+    margin: 1rem 0;
+}
+
+/* ── section label ── */
+.section-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+}
+
+.label-green  { color: #34d399; }
+.label-red    { color: #f87171; }
 
 /* ── streamlit overrides ── */
 .stButton > button {
-    background: linear-gradient(135deg, #2563eb, #7c3aed) !important;
+    background: linear-gradient(135deg, #6366f1, #a855f7) !important;
     color: white !important;
     border: none !important;
-    border-radius: 12px !important;
-    padding: 0.65rem 1.5rem !important;
-    font-size: 0.92rem !important;
-    font-weight: 600 !important;
-    box-shadow: 0 4px 14px rgba(37,99,235,0.3) !important;
-    transition: all 0.2s ease !important;
+    border-radius: 14px !important;
+    padding: 0.75rem 1.5rem !important;
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.02em !important;
+    box-shadow: 0 0 20px rgba(99,102,241,0.4), 0 4px 14px rgba(99,102,241,0.3) !important;
+    transition: all 0.3s ease !important;
     width: 100% !important;
 }
 
 .stButton > button:hover {
-    box-shadow: 0 6px 20px rgba(37,99,235,0.45) !important;
-    transform: translateY(-1px) !important;
+    box-shadow: 0 0 35px rgba(99,102,241,0.6), 0 6px 20px rgba(99,102,241,0.4) !important;
+    transform: translateY(-2px) !important;
 }
 
 .stDownloadButton > button {
-    background: linear-gradient(135deg, #059669, #0891b2) !important;
+    background: linear-gradient(135deg, #10b981, #0891b2) !important;
     color: white !important;
     border: none !important;
-    border-radius: 12px !important;
-    font-weight: 600 !important;
-    box-shadow: 0 4px 14px rgba(5,150,105,0.3) !important;
+    border-radius: 14px !important;
+    font-weight: 700 !important;
+    box-shadow: 0 0 20px rgba(16,185,129,0.3) !important;
     width: 100% !important;
 }
 
 .stTextArea textarea {
-    border-radius: 12px !important;
-    border: 1px solid #e5e7eb !important;
+    background: rgba(255,255,255,0.05) !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    border-radius: 14px !important;
+    color: #f1f5f9 !important;
     font-family: 'Inter', sans-serif !important;
     font-size: 0.88rem !important;
 }
 
+.stTextArea textarea::placeholder { color: #475569 !important; }
+
 .stTextInput input {
-    border-radius: 12px !important;
-    border: 1px solid #e5e7eb !important;
+    background: rgba(255,255,255,0.05) !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    border-radius: 14px !important;
+    color: #f1f5f9 !important;
     font-family: 'Inter', sans-serif !important;
 }
 
+.stTextInput input::placeholder { color: #475569 !important; }
+
 div[data-testid="stFileUploader"] {
+    background: rgba(255,255,255,0.03) !important;
+    border: 1px dashed rgba(99,102,241,0.4) !important;
+    border-radius: 14px !important;
+}
+
+label {
+    color: #94a3b8 !important;
+    font-size: 0.82rem !important;
+    font-weight: 500 !important;
+}
+
+.stSuccess, .stWarning, .stError, .stInfo {
     border-radius: 12px !important;
 }
 
-.stProgress > div > div {
-    background: linear-gradient(90deg, #2563eb, #7c3aed) !important;
-    border-radius: 10px !important;
-}
-
-/* hide streamlit default elements */
 #MainMenu {visibility: hidden;}
 footer {visibility: hidden;}
 header {visibility: hidden;}
+
+/* score counter JS animation */
+.animated-score {
+    font-size: 5.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+    text-align: center;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -475,11 +515,11 @@ def calc_score(matched, total):
 
 def get_status(score):
     if score >= 70:
-        return '<span class="score-status status-strong">Strong Match</span>'
+        return '<span class="score-status status-strong">⚡ Strong Match</span>'
     elif score >= 40:
-        return '<span class="score-status status-partial">Partial Match</span>'
+        return '<span class="score-status status-partial">⚠️ Partial Match</span>'
     else:
-        return '<span class="score-status status-low">Needs Work</span>'
+        return '<span class="score-status status-low">❌ Needs Work</span>'
 
 def get_smart_suggestions(resume_text, missing_skills):
     suggestions = []
@@ -499,7 +539,7 @@ def get_smart_suggestions(resume_text, missing_skills):
                            "Consider tailoring your summary specifically for this role.")
     return suggestions[:6]
 
-def animated_progress(label, value, color="blue"):
+def animated_progress(label, value):
     st.markdown(f"""
     <div class="progress-wrap">
         <div class="progress-label">
@@ -507,7 +547,7 @@ def animated_progress(label, value, color="blue"):
             <span class="progress-val">{value}%</span>
         </div>
         <div class="progress-track">
-            <div class="progress-fill" style="width: {value}%;"></div>
+            <div class="progress-fill" style="width:{value}%;"></div>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -522,16 +562,18 @@ def generate_pdf(resume_name, overall_score, skill_score, exp_score,
     story = []
 
     title_style = ParagraphStyle('Title', parent=styles['Title'],
-                                  fontSize=20, textColor=colors.HexColor('#2563eb'),
+                                  fontSize=20,
+                                  textColor=colors.HexColor('#6366f1'),
                                   spaceAfter=6)
     heading_style = ParagraphStyle('Heading', parent=styles['Heading2'],
-                                    fontSize=13, textColor=colors.HexColor('#111827'),
+                                    fontSize=13,
+                                    textColor=colors.HexColor('#111827'),
                                     spaceBefore=12, spaceAfter=6)
     body_style = ParagraphStyle('Body', parent=styles['Normal'],
                                  fontSize=10, leading=16,
                                  textColor=colors.HexColor('#374151'))
 
-    story.append(Paragraph("ResumeIQ — Scan Report", title_style))
+    story.append(Paragraph("ResumeIQ — AI Scan Report", title_style))
     story.append(Paragraph(f"Resume: {resume_name}", body_style))
     story.append(Spacer(1, 12))
 
@@ -549,12 +591,12 @@ def generate_pdf(resume_name, overall_score, skill_score, exp_score,
     ]
     table = Table(score_data, colWidths=[2.5*inch, 1.5*inch, 1.5*inch])
     table.setStyle(TableStyle([
-        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#2563eb')),
+        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#6366f1')),
         ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
         ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
         ('FONTSIZE', (0, 0), (-1, -1), 10),
         ('ROWBACKGROUNDS', (0, 1), (-1, -1),
-         [colors.HexColor('#eff6ff'), colors.white]),
+         [colors.HexColor('#eef2ff'), colors.white]),
         ('GRID', (0, 0), (-1, -1), 0.5, colors.HexColor('#e5e7eb')),
         ('PADDING', (0, 0), (-1, -1), 8),
     ]))
@@ -580,76 +622,80 @@ def generate_pdf(resume_name, overall_score, skill_score, exp_score,
     buffer.seek(0)
     return buffer
 
-# ── sidebar ───────────────────────────────────────────────────
-with st.sidebar:
-    st.markdown('<div class="sidebar-logo">⚡ ResumeIQ</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sidebar-tagline">Smart resume analysis powered by NLP</div>',
-                unsafe_allow_html=True)
+# ── UI ────────────────────────────────────────────────────────
 
-    st.markdown('<div class="sidebar-section">Upload Resume</div>', unsafe_allow_html=True)
-    uploaded_file = st.file_uploader("", type=["pdf"], label_visibility="collapsed")
-    if uploaded_file:
-        st.success(f"✅ {uploaded_file.name}")
-
-    st.markdown('<div class="sidebar-section">Job Description</div>', unsafe_allow_html=True)
-    jd_text = st.text_area("", height=200, placeholder="Paste the full job description here...",
-                            label_visibility="collapsed")
-
-    st.markdown('<div class="sidebar-section">PDF Report Password</div>',
-                unsafe_allow_html=True)
-    pdf_password = st.text_input("", type="password", placeholder="Set a password...",
-                                  label_visibility="collapsed")
-
-    st.markdown("<br>", unsafe_allow_html=True)
-    scan_clicked = st.button("⚡ Scan My Resume", use_container_width=True)
-
-    st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown("""
-    <div style="font-size:0.72rem; color:#9ca3af; line-height:1.8;">
-        <b style="color:#6b7280;">How it works</b><br>
-        1. Upload your resume PDF<br>
-        2. Paste a job description<br>
-        3. Set a PDF password<br>
-        4. Click Scan My Resume<br>
-        5. Download your report
-    </div>
-    """, unsafe_allow_html=True)
-
-# ── main area ─────────────────────────────────────────────────
+# hero
 st.markdown("""
-<div class="main-hero">
-    <div class="hero-title">Smart Resume <span>Keyword Scanner</span></div>
+<div class="hero-wrap">
+    <div class="hero-badge">⚡ AI Powered · NLP · Free</div>
+    <div class="hero-title">Resume<span>IQ</span></div>
     <div class="hero-sub">
-        Match your resume against any job description and get instant AI-powered insights
+        Upload your resume · Match any job description · 
+        Get AI-powered insights in seconds
     </div>
 </div>
 """, unsafe_allow_html=True)
 
-if not scan_clicked:
-    st.markdown("""
-    <div class="section-card">
-        <div class="empty-state">
-            <div class="empty-icon">⚡</div>
-            <div class="empty-title">Ready to scan your resume</div>
-            <div class="empty-sub">
-                Upload your resume, paste a job description,
-                and click Scan My Resume in the sidebar to get started
-            </div>
+# input card
+st.markdown("""
+<div class="glass-card">
+    <div class="card-header">
+        <div class="card-icon indigo">📁</div>
+        <div>
+            <div class="card-title">Analyze Your Resume</div>
+            <div class="card-subtitle">Fill all fields and click Scan</div>
         </div>
     </div>
-    """, unsafe_allow_html=True)
+</div>
+""", unsafe_allow_html=True)
 
-else:
+uploaded_file = st.file_uploader(
+    "📄 Upload Resume (PDF only)", type=["pdf"])
+
+st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
+
+jd_text = st.text_area(
+    "📋 Paste Job Description",
+    height=160,
+    placeholder="Copy and paste the full job description here...")
+
+st.markdown("<div style='height:8px'></div>", unsafe_allow_html=True)
+
+pdf_password = st.text_input(
+    "🔐 PDF Report Password",
+    type="password",
+    placeholder="Set a password to protect your PDF report...")
+
+st.markdown("<div style='height:16px'></div>", unsafe_allow_html=True)
+
+scan_clicked = st.button("⚡ Scan My Resume", use_container_width=True)
+
+if scan_clicked:
     if not uploaded_file:
-        st.warning("⚠️ Please upload your resume PDF in the sidebar.")
+        st.warning("⚠️ Please upload your resume PDF.")
     elif not jd_text.strip():
-        st.warning("⚠️ Please paste a job description in the sidebar.")
+        st.warning("⚠️ Please paste a job description.")
     elif not pdf_password.strip():
-        st.warning("⚠️ Please set a password for your PDF report.")
+        st.warning("⚠️ Please set a PDF report password.")
     else:
-        with st.spinner("✨ Analyzing your resume..."):
+        # loading animation
+        st.markdown("""
+        <div class="glass-card">
+            <div style="text-align:center; padding: 0.5rem 0;">
+                <div style="font-size:0.85rem; color:#94a3b8; 
+                            font-weight:500; margin-bottom:0.8rem;">
+                    ✨ Scanning your resume with AI...
+                </div>
+                <div class="loading-bar-wrap">
+                    <div class="loading-bar-fill"></div>
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        with st.spinner(""):
             resume_text = extract_text_from_pdf(uploaded_file)
-            time.sleep(0.5)
+            time.sleep(1.2)
 
             matched_skills, missing_skills = get_matches(resume_text, SKILL_KEYWORDS)
             matched_exp,    missing_exp    = get_matches(resume_text, EXPERIENCE_KEYWORDS)
@@ -665,11 +711,11 @@ else:
 
             suggestions = get_smart_suggestions(resume_text, missing_skills)
 
-        # stat cards row
+        # stat cards
         st.markdown(f"""
-        <div class="stats-row">
+        <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-number blue">{overall}%</div>
+                <div class="stat-number indigo">{overall}%</div>
                 <div class="stat-label">Overall Match</div>
             </div>
             <div class="stat-card">
@@ -678,118 +724,142 @@ else:
             </div>
             <div class="stat-card">
                 <div class="stat-number green">{len(all_matched)}</div>
-                <div class="stat-label">Keywords Matched</div>
+                <div class="stat-label">Keywords Found</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number orange">{len(missing_skills)}</div>
+                <div class="stat-number amber">{len(missing_skills)}</div>
                 <div class="stat-label">Keywords Missing</div>
             </div>
         </div>
         """, unsafe_allow_html=True)
 
-        col1, col2 = st.columns([1, 1])
-
-        with col1:
-            # score card
-            st.markdown(f"""
-            <div class="section-card">
-                <div class="card-header">
-                    <div class="card-icon blue">🎯</div>
-                    <div>
-                        <div class="card-title">Overall Match Score</div>
-                        <div class="card-subtitle">Based on full keyword analysis</div>
-                    </div>
-                </div>
-                <div class="score-display">
-                    <div class="score-big">{overall}%</div>
-                    <div>{get_status(overall)}</div>
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
-
-            # progress bars card
-            st.markdown("""
-            <div class="section-card">
-                <div class="card-header">
-                    <div class="card-icon purple">📊</div>
-                    <div>
-                        <div class="card-title">Score Breakdown</div>
-                        <div class="card-subtitle">By resume category</div>
-                    </div>
-                </div>
-            """, unsafe_allow_html=True)
-            animated_progress("Skills", skill_sc)
-            animated_progress("Experience", exp_sc)
-            animated_progress("Education", edu_sc)
-            st.markdown('</div>', unsafe_allow_html=True)
-
-        with col2:
-            # keywords card
-            found_pills = " ".join([f'<span class="pill pill-found">{kw}</span>'
-                                    for kw in sorted(all_matched)])
-            missing_pills = " ".join([f'<span class="pill pill-missing">{kw}</span>'
-                                      for kw in sorted(missing_skills)])
-            st.markdown(f"""
-            <div class="section-card">
-                <div class="card-header">
-                    <div class="card-icon green">🔑</div>
-                    <div>
-                        <div class="card-title">Keyword Analysis</div>
-                        <div class="card-subtitle">{len(all_matched)} matched · {len(missing_skills)} missing</div>
-                    </div>
-                </div>
-                <div style="margin-bottom:1rem;">
-                    <div style="font-size:0.78rem;font-weight:700;color:#059669;
-                                text-transform:uppercase;letter-spacing:0.05em;
-                                margin-bottom:8px;">
-                        ✅ Matched
-                    </div>
-                    <div class="pills-wrap">{found_pills if found_pills else '<span style="color:#9ca3af;font-size:0.82rem;">None found</span>'}</div>
-                </div>
-                <div>
-                    <div style="font-size:0.78rem;font-weight:700;color:#dc2626;
-                                text-transform:uppercase;letter-spacing:0.05em;
-                                margin-bottom:8px;">
-                        ❌ Missing
-                    </div>
-                    <div class="pills-wrap">{missing_pills if missing_pills else '<span style="color:#9ca3af;font-size:0.82rem;">None — great job!</span>'}</div>
-                </div>
-            </div>
-            """, unsafe_allow_html=True)
-
-            # suggestions card
-            suggestions_html = ""
-            for i, tip in enumerate(suggestions, 1):
-                suggestions_html += f"""
-                <div class="suggestion-item">
-                    <div class="suggestion-num">{i}</div>
-                    <div class="suggestion-text">{tip}</div>
-                </div>"""
-            st.markdown(f"""
-            <div class="section-card">
-                <div class="card-header">
-                    <div class="card-icon orange">💡</div>
-                    <div>
-                        <div class="card-title">Smart Suggestions</div>
-                        <div class="card-subtitle">AI-powered improvement tips</div>
-                    </div>
-                </div>
-                {suggestions_html}
-            </div>
-            """, unsafe_allow_html=True)
-
-        # export card
-        st.markdown("""
-        <div class="section-card">
+        # animated score counter
+        st.markdown(f"""
+        <div class="glass-card">
             <div class="card-header">
-                <div class="card-icon blue">📥</div>
+                <div class="card-icon indigo">🎯</div>
                 <div>
-                    <div class="card-title">Export Report</div>
-                    <div class="card-subtitle">Download your full analysis as PDF</div>
+                    <div class="card-title">Overall Match Score</div>
+                    <div class="card-subtitle">Based on full keyword analysis</div>
+                </div>
+            </div>
+            <div class="score-display">
+                <div class="animated-score" id="score-counter">0%</div>
+                <div style="margin-top:12px;">{get_status(overall)}</div>
+            </div>
+        </div>
+        <script>
+            function animateCounter(target) {{
+                var el = document.getElementById('score-counter');
+                if (!el) return;
+                var current = 0;
+                var step = Math.ceil(target / 40);
+                var timer = setInterval(function() {{
+                    current += step;
+                    if (current >= target) {{
+                        current = target;
+                        clearInterval(timer);
+                    }}
+                    el.textContent = current + '%';
+                }}, 30);
+            }}
+            setTimeout(function() {{ animateCounter({overall}); }}, 300);
+        </script>
+        """, unsafe_allow_html=True)
+
+        # score breakdown
+        st.markdown("""
+        <div class="glass-card">
+            <div class="card-header">
+                <div class="card-icon purple">📊</div>
+                <div>
+                    <div class="card-title">Score Breakdown</div>
+                    <div class="card-subtitle">By resume category</div>
+                </div>
+            </div>
+        """, unsafe_allow_html=True)
+        animated_progress("🛠 Skills", skill_sc)
+        animated_progress("💼 Experience", exp_sc)
+        animated_progress("🎓 Education", edu_sc)
+        st.markdown('</div>', unsafe_allow_html=True)
+
+        # keywords
+        found_pills = " ".join([
+            f'<span class="pill pill-found">{kw}</span>'
+            for kw in sorted(all_matched)
+        ])
+        missing_pills = " ".join([
+            f'<span class="pill pill-missing">{kw}</span>'
+            for kw in sorted(missing_skills)
+        ])
+        st.markdown(f"""
+        <div class="glass-card">
+            <div class="card-header">
+                <div class="card-icon green">🔑</div>
+                <div>
+                    <div class="card-title">Keyword Analysis</div>
+                    <div class="card-subtitle">
+                        {len(all_matched)} matched · {len(missing_skills)} missing
+                    </div>
+                </div>
+            </div>
+            <div style="margin-bottom:1.2rem;">
+                <div class="section-label label-green">✅ Matched Keywords</div>
+                <div class="pills-wrap">
+                    {found_pills if found_pills else
+                     '<span style="color:#475569;font-size:0.82rem;">None found</span>'}
+                </div>
+            </div>
+            <div class="glass-divider"></div>
+            <div style="margin-top:1rem;">
+                <div class="section-label label-red">❌ Missing Keywords</div>
+                <div class="pills-wrap">
+                    {missing_pills if missing_pills else
+                     '<span style="color:#34d399;font-size:0.82rem;">None — great job!</span>'}
                 </div>
             </div>
         </div>
         """, unsafe_allow_html=True)
+
+        # suggestions
+        suggestions_html = ""
+        for i, tip in enumerate(suggestions, 1):
+            suggestions_html += f"""
+            <div class="suggestion-item">
+                <div class="suggestion-num">{i}</div>
+                <div class="suggestion-text">{tip}</div>
+            </div>"""
+
+        st.markdown(f"""
+        <div class="glass-card">
+            <div class="card-header">
+                <div class="card-icon amber">💡</div>
+                <div>
+                    <div class="card-title">Smart Suggestions</div>
+                    <div class="card-subtitle">
+                        AI-powered tips to improve your resume
+                    </div>
+                </div>
+            </div>
+            {suggestions_html}
+        </div>
+        """, unsafe_allow_html=True)
+
+        # export
+        st.markdown("""
+        <div class="glass-card">
+            <div class="card-header">
+                <div class="card-icon green">📥</div>
+                <div>
+                    <div class="card-title">Export Your Report</div>
+                    <div class="card-subtitle">
+                        Download full analysis as PDF
+                    </div>
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
         pdf_buffer = generate_pdf(
             uploaded_file.name, overall, skill_sc, exp_sc, edu_sc,
             all_matched, missing_skills, suggestions, pdf_password
@@ -801,4 +871,4 @@ else:
             mime="application/pdf",
             use_container_width=True
         )
-        st.info(f"🔐 Your PDF password: **{pdf_password}**")
+        st.info(f"🔐 PDF Password: **{pdf_password}**")
